@@ -67,6 +67,29 @@ namespace ProductApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
             }
         }
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<Product>> UpdateProduct(int id, Product product)
+        {
+            try
+            {
+                if (id!= product.ProductId)
+                
+                   return BadRequest("Product Id mismatch");
+
+                    var productToUpdate = await _productRepository.GetProduct(id);
+
+                    if(productToUpdate== null)
+                    return NotFound($"Product with Id {id} not found");
+
+                    return await _productRepository.UpdateProduct(product);
+
+                
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database");
+            }
+        }
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<Product>> DeleteProduct(int id)
         {
